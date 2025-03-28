@@ -8,26 +8,31 @@ import Register from "./views/Register.jsx";
 import CarDetail from "./views/CarDetail.jsx";
 import CreateCar from "./views/CreateCar.jsx";
 import EditCar from "./views/EditCar.jsx";
+import {AuthProvider} from "./context/AuthContext.jsx";
 
 
 function App() {
 
+
+
   return (
       <>
-          <Router>
-              <Navbar/>
-              <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/login" element={<Login />} />
-                  <Route path="register" element={<Register />} />
-                  <Route path="/cars/show/:id" element={<CarDetail   />} />
-                  <Route path="/cars/create" element={<CreateCar   />} />
-                  <Route path={"/cars/update/:id"} element={<EditCar />} />
+          <AuthProvider>
+              <Router>
+                  <Navbar/>
+                  <Routes>
+                      <Route path="/" element={<Home />} />
+                      <Route path="/login" element={<Login />} />
+                      <Route path="register" element={<Register />} />
+                      <Route path="/cars/show/:id" element={<CarDetail   />} />
+                      <Route path="/cars/create" element={<CreateCar   />} />
+                      <Route path={"/cars/update/:id"} element={<EditCar />} />
 
-              </Routes>
+                  </Routes>
 
 
-          </Router>
+              </Router>
+          </AuthProvider>
 
       </>
   )
