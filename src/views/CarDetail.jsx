@@ -10,10 +10,10 @@ function CarDetail() {
     const currentUser = localStorage.getItem('user')
     const [comments, setComments] = useState([])
     const [messageComment, setMessageComment] = useState('')
-    const [content, setContent] = useState('');
-
-
-
+    const [content, setContent] = useState('')
+    const [showEditModal, setShowEditModal] = useState(false)
+    const [editCommentId, setEditCommentId] = useState(null)
+    const [editContent, setEditContent] = useState('')
 
     async function getCar() {
         try {
@@ -28,18 +28,16 @@ function CarDetail() {
         try{
             const response = await axios.get('http://127.0.0.1:8000/comments')
             setComments(response.data)
-
-        }catch(error){
+        } catch(error){
             setMessageComment(error)
         }
     }
 
     async function createComment(e){
         e.preventDefault()
-
         if(currentUser){
             try{
-                const response = await axios.post('http://127.0.0.1:8000/comments/create', {
+                await axios.post('http://127.0.0.1:8000/comments/create', {
                     content: content,
                     car: id
                 }, {
@@ -49,20 +47,50 @@ function CarDetail() {
                 })
                 setContent('')
                 getCar()
-
-
-
-            }catch(error){
+            } catch(error){
                 setMessageComment(error)
-
             }
         }
-
-
     }
 
+    async function deleteComment(commentId) {
+        if (!currentUser || !commentId) return
+        try {
+            await axios.delete(`http://127.0.0.1:8000/comments/delete/${commentId}`, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            })
+            getCar()
+        } catch (error) {
+            setMessageComment(error)
+        }
+    }
+
+    function openEditModal(comment) {
+        setEditCommentId(comment._id)
+        setEditContent(comment.content)
+        setShowEditModal(true)
+    }
+
+    async function updateComment(e) {
+        e.preventDefault()
 
 
+        try {
+            await axios.put(`http://127.0.0.1:8000/comments/update/${editCommentId}`, {
+                content: editContent
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            })
+            setShowEditModal(false)
+            getCar()
+        } catch (error) {
+            setMessageComment(error)
+        }
+    }
 
     useEffect(() => {
         getCar(), getComments()
@@ -89,23 +117,22 @@ function CarDetail() {
     }
 
     return (
-        <div className="container  mt-5">
+        <div className="container mt-5">
             {message && <p className="alert alert-danger">{message}</p>}
 
             <div className="row">
                 {car && (
                     <div className="col-7">
-                        <div className="card ">
+                        <div className="card">
                             <div className="card-header bg-primary text-white">
                                 <h2>{car.name}</h2>
                             </div>
-                            <div className="card-body mb-5">
+                            <div className="card-body">
                                 <h4>{car.brand}</h4>
                                 <p className="card-text">Power: {car.power} HP</p>
                                 <p className="card-text text-muted">
-                                    <small className="mb-5">Owner: {car.author.username}</small>
+                                    <small>Owner: {car.author.username}</small>
                                 </p>
-
                             </div>
                             <div className="card-footer d-flex justify-content-between">
                                 <Link to="/" className="btn btn-primary">
@@ -124,10 +151,7 @@ function CarDetail() {
                                 )}
                             </div>
                         </div>
-
                     </div>
-
-
                 )}
 
                 <div className="col-md-5">
@@ -141,24 +165,34 @@ function CarDetail() {
                                     {car.comments.map((comment) => (
                                         <div key={comment._id}
                                              className="list-group-item list-group-item-action mb-2 border-start border-secondary mb-3 border-1">
-                                            <div className="d-flex">
-                                                <p className="mb-1 text-primary">{comment.author.username} : </p>
-                                                <p className="mb-1 ms-3"> {comment.content}</p>
-                                            </div>
+                                            <div className="d-flex justify-content-between">
+                                                <div>
+                                                    <p className="mb-1 text-primary">{comment.author.username} :
+                                                        <span className="text-dark ms-2">{comment.content}</span></p>
+                                                </div>
 
+                                                {currentUser === comment.author.username && (
+                                                    <div>
+                                                        <button className="btn btn-sm btn-secondary mx-1" onClick={() => openEditModal(comment)}>
+                                                            Edit
+                                                        </button>
+                                                        <button className="btn btn-sm btn-danger" onClick={() => deleteComment(comment._id)}>
+                                                            Delete
+                                                        </button>
+                                                    </div>
+                                                )}
+                                            </div>
                                         </div>
                                     ))}
                                 </div>
                             ) : (
                                 <div className="text-center text-muted my-4">
-                                    <i className="bi bi-chat-left-text" style={{fontSize: '2rem'}}></i>
                                     <p className="mt-2">Aucun commentaire pour le moment</p>
                                 </div>
                             )}
                         </div>
                     </div>
                 </div>
-
             </div>
 
             <div className="col-12 mt-5">
@@ -169,16 +203,12 @@ function CarDetail() {
                                 <textarea
                                     type="text"
                                     className="form-control"
-                                    placeholder="Ajouter un commentaire..."
+                                    placeholder="Ajouter un commentaire"
                                     value={content}
                                     onChange={(e) => setContent(e.target.value)}
                                     required
                                 />
-                                <button
-                                    className="btn btn-primary"
-                                    type="submit"
-                                >Envoyer
-                                </button>
+                                <button className="btn btn-primary" type="submit">Envoyer</button>
                             </div>
                         </form>
                     ) : (
@@ -189,10 +219,34 @@ function CarDetail() {
                 </div>
             </div>
 
-
+            {showEditModal && (
+                <div className="modal" style={{display: 'block', position: 'fixed', top: 0, left: 0, width: '100%', height: '100%'}}>
+                    <div className="modal-dialog" style={{margin: '10% auto'}}>
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title">Modifier le commentaire</h5>
+                                <button type="button" className="btn-close" onClick={() => setShowEditModal(false)}></button>
+                            </div>
+                            <form onSubmit={updateComment}>
+                                <div className="modal-body">
+                                    <textarea
+                                        className="form-control"
+                                        value={editContent}
+                                        onChange={(e) => setEditContent(e.target.value)}
+                                        rows="3"
+                                        required
+                                    ></textarea>
+                                </div>
+                                <div className="modal-footer">
+                                    <button type="button" className="btn btn-secondary" onClick={() => setShowEditModal(false)}>Annuler</button>
+                                    <button type="submit" className="btn btn-primary">Enregistrer</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
-
-
     )
 }
 
