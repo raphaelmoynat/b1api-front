@@ -31,7 +31,7 @@ function Cars() {
                     <div className="col-md-4 mb-4" key={car._id}>
                         <div className="card h-100 shadow-sm">
                             <div className="card-body">
-                                <h5 className="card-title">{car.name}</h5>
+                                <h5 className="card-title f">{car.name}</h5>
                                 <h6 className="card-subtitle mb-2 text-muted">{car.brand}</h6>
                                 <p className="card-text">Power: {car.power} CV</p>
                                 <p className="card-text text-muted">
@@ -41,7 +41,7 @@ function Cars() {
                                     <small>Comments: {car.comments.length}</small>
                                 </p>
                             </div>
-                            <div className="card-footer bg-white">
+                            <div className="card-footer bg-white text-center">
                                 <Link to={`/cars/show/${car._id}`} className="btn btn-primary btn-sm">
                                     View Details
                                 </Link>

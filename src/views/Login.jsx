@@ -18,7 +18,7 @@ function Login() {
             localStorage.setItem('user', username)
 
             console.log('réussi')
-            navigate('/home')
+            navigate('/')
 
         } catch (error) {
             console.log(error)

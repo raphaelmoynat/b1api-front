@@ -6,6 +6,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Login from "./views/Login.jsx";
 import Register from "./views/Register.jsx";
 import CarDetail from "./views/CarDetail.jsx";
+import CreateCar from "./views/CreateCar.jsx";
+import EditCar from "./views/EditCar.jsx";
 
 
 function App() {
@@ -15,10 +17,12 @@ function App() {
           <Router>
               <Navbar/>
               <Routes>
-                  <Route path="/home" element={<Home />} />
+                  <Route path="/" element={<Home />} />
                   <Route path="/login" element={<Login />} />
                   <Route path="register" element={<Register />} />
-                  <Route path="cardetail" element={<CarDetail />} />
+                  <Route path="/cars/show/:id" element={<CarDetail   />} />
+                  <Route path="/cars/create" element={<CreateCar   />} />
+                  <Route path={"/cars/update/:id"} element={<EditCar />} />
 
               </Routes>
 

@@ -17,6 +17,7 @@ function Register() {
             setUsername('')
             setPassword('')
             console.log("inscription réussie")
+
             navigate('/login');
 
         } catch (error) {

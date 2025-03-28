@@ -18,6 +18,11 @@ function Navbar() {
                                     Register
                                 </Link>
                             </li>
+                            <li className="nav-item">
+                                <Link className="nav-link" to="/cars/create">
+                                    Add car
+                                </Link>
+                            </li>
 
 
                         </ul>
