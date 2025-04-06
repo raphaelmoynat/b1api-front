@@ -17,7 +17,7 @@ function CarDetail() {
 
     async function getCar() {
         try {
-            const response = await axios.get(`http://127.0.0.1:8000/cars/show/${id}`)
+            const response = await axios.get(`https://apib1.raphaelmoynat.com/cars/show/${id}`)
             setCar(response.data)
         } catch (error) {
             setMessage(error)
@@ -26,7 +26,7 @@ function CarDetail() {
 
     async function getComments(){
         try{
-            const response = await axios.get('http://127.0.0.1:8000/comments')
+            const response = await axios.get('https://apib1.raphaelmoynat.com/comments')
             setComments(response.data)
         } catch(error){
             setMessageComment(error)
@@ -37,7 +37,7 @@ function CarDetail() {
         e.preventDefault()
         if(currentUser){
             try{
-                await axios.post('http://127.0.0.1:8000/comments/create', {
+                await axios.post('https://apib1.raphaelmoynat.com/comments/create', {
                     content: content,
                     car: id
                 }, {
@@ -56,7 +56,7 @@ function CarDetail() {
     async function deleteComment(commentId) {
         if (!currentUser || !commentId) return
         try {
-            await axios.delete(`http://127.0.0.1:8000/comments/delete/${commentId}`, {
+            await axios.delete(`https://apib1.raphaelmoynat.com/comments/delete/${commentId}`, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
@@ -78,7 +78,7 @@ function CarDetail() {
 
 
         try {
-            await axios.put(`http://127.0.0.1:8000/comments/update/${editCommentId}`, {
+            await axios.put(`https://apib1.raphaelmoynat.com/comments/update/${editCommentId}`, {
                 content: editContent
             }, {
                 headers: {
@@ -100,7 +100,7 @@ function CarDetail() {
         const token = localStorage.getItem('token')
         if (token) {
             try {
-                await axios.delete(`http://127.0.0.1:8000/cars/delete/${id}`, {
+                await axios.delete(`https://apib1.raphaelmoynat.com/cars/delete/${id}`, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }

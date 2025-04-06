@@ -10,7 +10,7 @@ function Register() {
     async function handleRegister(e) {
         e.preventDefault();
         try {
-            const response = await axios.post('http://127.0.0.1:8000/register', {
+            const response = await axios.post('https://apib1.raphaelmoynat.com/register', {
                 username,
                 password
             })

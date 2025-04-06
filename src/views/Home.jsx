@@ -8,7 +8,7 @@ function Cars() {
 
     async function getCars() {
         try {
-            const response = await axios.get('http://127.0.0.1:8000/cars')
+            const response = await axios.get('https://apib1.raphaelmoynat.com/cars')
             setCars(response.data)
         } catch (error) {
             setMessage(error)

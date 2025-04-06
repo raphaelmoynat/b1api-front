@@ -16,7 +16,7 @@ function CreateCar() {
 
         if (token) {
             try{
-                const response = await axios.post('http://127.0.0.1:8000/cars/create', {
+                const response = await axios.post('https://apib1.raphaelmoynat.com/cars/create', {
                     name: name,
                     brand: brand,
                     power: power,

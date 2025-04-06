@@ -12,7 +12,7 @@ function Login() {
     async function handleLogin(e) {
         e.preventDefault()
         try {
-            const response = await axios.post('http://127.0.0.1:8000/login', {
+            const response = await axios.post('https://apib1.raphaelmoynat.com/login', {
                 username,
                 password
             })

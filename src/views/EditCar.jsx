@@ -13,7 +13,7 @@ function EditCar() {
 
     async function getCar() {
         try {
-            const response = await axios.get(`http://127.0.0.1:8000/cars/show/${id}`)
+            const response = await axios.get(`https://apib1.raphaelmoynat.com/cars/show/${id}`)
             const car = response.data
             setName(car.name)
             setBrand(car.brand)
@@ -33,7 +33,7 @@ function EditCar() {
 
         try {
             await axios.put(
-                `http://127.0.0.1:8000/cars/update/${id}`,
+                `https://apib1.raphaelmoynat.com/cars/update/${id}`,
                 {
                     name,
                     brand,
